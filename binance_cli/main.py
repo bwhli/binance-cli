@@ -1,4 +1,5 @@
 import typer
+from rich import print
 
 from binance_cli.binance_client import BinanceClient
 
@@ -6,8 +7,16 @@ app = typer.Typer()
 
 
 @app.command()
-def debug():
-    print(__name__)
+def account():
+    binance_client = BinanceClient()
+    result = binance_client.get_account()
+    balances = [
+        balance
+        for balance in result["balances"]
+        if float(balance["free"]) > 0 or float(balance["locked"])
+    ]
+    result["balances"] = sorted(balances, key=lambda x: x["asset"])
+    print(result)
 
 
 @app.command()

@@ -1,6 +1,6 @@
 __version__ = "0.1.0"
-import typer
 from dotenv import dotenv_values
+from rich import print
 
 ENV = dotenv_values(".env")
 

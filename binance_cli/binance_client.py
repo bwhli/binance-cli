@@ -2,6 +2,7 @@ import typer
 from binance.client import Client
 from binance.enums import *
 from binance.exceptions import BinanceAPIException
+from rich import print
 
 from binance_cli import ENV
 
@@ -13,6 +14,14 @@ class BinanceClient:
 
     def __init__(self) -> None:
         self.client = Client(self.BINANCE_API_KEY, self.BINANCE_SECRET_KEY)
+
+    def get_account(self):
+        try:
+            result = self.client.get_account()
+            return result
+        except BinanceAPIException as e:
+            print(e)
+            raise typer.Exit()
 
     def buy_limit(self, market: str, amount: float, price: str):
         try:
