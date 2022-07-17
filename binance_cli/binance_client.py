@@ -14,11 +14,44 @@ class BinanceClient:
     def __init__(self) -> None:
         self.client = Client(self.BINANCE_API_KEY, self.BINANCE_SECRET_KEY)
 
+    def buy_limit(self, market: str, amount: float, price: str):
+        try:
+            result = self.client.order_limit_buy(
+                symbol=market.upper(), quantity=amount, price=str(price)
+            )
+            return result
+        except BinanceAPIException as e:
+            print(e)
+            raise typer.Exit()
+
     def buy_market(self, market: str, amount: float):
         try:
             result = self.client.create_order(
-                symbol=market,
+                symbol=market.upper(),
                 side=SIDE_BUY,
+                type=ORDER_TYPE_MARKET,
+                quantity=amount,
+            )
+            return result
+        except BinanceAPIException as e:
+            print(e)
+            raise typer.Exit()
+
+    def sell_limit(self, market: str, amount: float, price: str):
+        try:
+            result = self.client.order_limit_sell(
+                symbol=market.upper(), quantity=amount, price=str(price)
+            )
+            return result
+        except BinanceAPIException as e:
+            print(e)
+            raise typer.Exit()
+
+    def sell_market(self, market: str, amount: float):
+        try:
+            result = self.client.create_order(
+                symbol=market.upper(),
+                side=SIDE_SELL,
                 type=ORDER_TYPE_MARKET,
                 quantity=amount,
             )
@@ -32,7 +65,10 @@ class BinanceClient:
     ):
         try:
             result = self.client.withdraw(
-                coin=asset, address=address, amount=amount, addressTag=address_tag
+                coin=asset.upper(),
+                address=address,
+                amount=amount,
+                addressTag=address_tag,
             )
             return result
         except BinanceAPIException as e:
