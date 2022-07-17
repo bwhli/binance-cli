@@ -72,7 +72,10 @@ def withdraw(
     amount: float = typer.Argument(..., help="The amount of the asset to withdraw."),
     address: str = typer.Argument(..., help="The wallet address to withdraw to."),
     address_tag: str = typer.Argument(None, help="The tag or memo if required."),
+    network: str = typer.Option(None, help="The blockchain network to withdraw to."),
 ):
     binance_client = BinanceClient()
-    result = binance_client.withdraw(asset.upper(), amount, address, address_tag)
+    result = binance_client.withdraw(
+        asset.upper(), amount, address, address_tag, network
+    )
     print(result)

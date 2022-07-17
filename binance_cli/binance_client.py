@@ -61,7 +61,12 @@ class BinanceClient:
             raise typer.Exit()
 
     def withdraw(
-        self, asset: str, amount: float, address: str, address_tag: str = None
+        self,
+        asset: str,
+        amount: float,
+        address: str,
+        address_tag: str = None,
+        network=None,
     ):
         try:
             result = self.client.withdraw(
@@ -69,6 +74,7 @@ class BinanceClient:
                 address=address,
                 amount=amount,
                 addressTag=address_tag,
+                network=network,
             )
             return result
         except BinanceAPIException as e:
